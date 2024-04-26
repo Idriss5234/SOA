@@ -36,7 +36,7 @@ async function connectToMongo() {
 connectToMongo();
 
 // getRooms function  (Idriss)
-const { getRooms } = require("./controllers/roomController");
+const { getRooms } = require("./controllers/GetRooms");
 
 app.get("/api/rooms", async (req, res) => {
   try {
