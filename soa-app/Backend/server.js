@@ -1,71 +1,55 @@
+// server.js
+const express = require("express");
 const { MongoClient } = require("mongodb");
+const cors = require("cors");
+
+const app = express();
+const port = 3001;
+
+// Middleware
+app.use(express.json());
+app.use(cors());
 
 // MongoDB connection URI
 const uri =
-  "mongodb+srv://idkr5234:DSos7I5Pail1TuJe@soa.o9omsdr.mongodb.net/?retryWrites=true&w=majority&appName=SOA"; // Change this to your MongoDB URI
+  "mongodb+srv://idkr5234:DSos7I5Pail1TuJe@soa.o9omsdr.mongodb.net/?retryWrites=true&w=majority&appName=SOA";
 
 // Database Name
 const dbName = "SOA";
-const collectionName = "users"; // Name of your collection
+const collectionName = "salle"; // Name of your collection
 
-// Create a new MongoClient
+// Connect to MongoDB
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-// Connect to the MongoDB server
 async function connectToMongo() {
   try {
     // Connect to the MongoDB client
     await client.connect();
-
     console.log("Connected to MongoDB");
-
-    // Access a specific database
-    const db = client.db(dbName);
-
-    // Perform operations using the database
-    // For example, you can insert documents, query data, etc.
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
   }
 }
-async function listDatabases(client) {
-  databasesList = await client.db().admin().listDatabases();
-
-  console.log("Databases:");
-  databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
-}
-// Call the function to connect to MongoDB
 connectToMongo();
-listDatabases(client);
 
-async function getAllUsers() {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
+// Route to fetch room data
+app.get("/api/rooms", async (req, res) => {
   try {
-    await client.connect();
-
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
-
-    // Find all documents in the collection
-    const users = await collection.find({}).toArray();
-
-    console.log("All users:", users);
-
-    return users;
+    const rooms = await collection.find({}).toArray();
+    console.log(rooms);
+    res.json(rooms);
   } catch (error) {
-    console.error("Error retrieving users:", error);
-    return [];
-  } finally {
-    await client.close();
+    console.error("Error retrieving rooms:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
-}
+});
 
-// Call the function to retrieve all users
-getAllUsers();
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
