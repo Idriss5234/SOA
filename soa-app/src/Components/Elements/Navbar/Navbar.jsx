@@ -6,10 +6,10 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="links">
-        <Link to="./" className="nav-link home">
+        <Link to="./Home" className="nav-link home">
           Home
         </Link>
-        <Link to="/Home" className="nav-link">
+        <Link to="/Post" className="nav-link">
           Post
         </Link>
         <Link to="/Book" className="nav-link">
