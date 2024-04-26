@@ -35,12 +35,12 @@ async function connectToMongo() {
 }
 connectToMongo();
 
-// Route to fetch room data
+// getRooms function  (Idriss)
+const { getRooms } = require("./controllers/roomController");
+
 app.get("/api/rooms", async (req, res) => {
   try {
-    const database = client.db(dbName);
-    const collection = database.collection(collectionName);
-    const rooms = await collection.find({}).toArray();
+    const rooms = await getRooms();
     console.log(rooms);
     res.json(rooms);
   } catch (error) {
