@@ -48,6 +48,23 @@ app.get("/api/rooms", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+//
+
+// Add a room to the database (Idriss)
+app.post("/api/rooms", async (req, res) => {
+  try {
+    const room = req.body;
+    const result = await client
+      .db(dbName)
+      .collection(collectionName)
+      .insertOne(room);
+    res.json(result);
+  } catch (error) {
+    console.error("Error adding room:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+//
 
 // Start the server
 app.listen(port, () => {
