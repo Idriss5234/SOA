@@ -5,6 +5,7 @@ import Home from "./Components/Services/Home/home";
 import Post from "./Components/Services/Publier/publier";
 import Book from "./Components/Services/Réserver/Réserver";
 import Reservations from "./Components/Services/Mes Réservations/mes_res";
+import Bottom from "./Components/Elements/BottomBar/Bottom";
 import "./App.css";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/Book" element={<Book />} />
           <Route path="/Reservations" element={<Reservations />} />
         </Routes>
+        <Bottom />
       </div>
     </Router>
   );

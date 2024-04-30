@@ -6,10 +6,10 @@ function Card({ room }) {
   return (
     <div className="card">
       <img
-        src="https://www.dgicommunications.com/wp-content/uploads/2018/03/DSC_2917.jpg"
-        alt={room.name} // Assuming your room object has a field named title for the room title
-        height={200}
+        src={room.photos}
         width={300}
+        height={300}
+        alt={room.name} // Assuming your room object has a field named title for the room title
       />
       <div className="card-content">
         <h3>{room.name}</h3>

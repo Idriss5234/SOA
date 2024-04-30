@@ -1,8 +1,9 @@
-// GetRooms.js
+// AddRooms.js
 const { MongoClient } = require("mongodb");
 
 const uri =
   "mongodb+srv://idkr5234:DSos7I5Pail1TuJe@soa.o9omsdr.mongodb.net/?retryWrites=true&w=majority&appName=SOA";
+
 const dbName = "SOA";
 const collectionName = "salle";
 
@@ -11,19 +12,20 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
 });
 
-async function getRoomsAsync() {
+async function addRoomsAsync(room) {
   try {
     await client.connect();
-    const database = client.db(dbName);
-    const collection = database.collection(collectionName);
-    const rooms = await collection.find({}).toArray();
-    return rooms;
+    const result = await client
+      .db(dbName)
+      .collection(collectionName)
+      .insertOne(room);
+    return result;
   } catch (error) {
-    console.error("Error retrieving rooms:", error);
+    console.error("Error adding room:", error);
     throw error;
   } finally {
     await client.close();
   }
 }
 
-module.exports = { getRoomsAsync };
+module.exports = { addRoomsAsync };

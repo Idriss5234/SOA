@@ -3,6 +3,9 @@ const express = require("express");
 const { MongoClient } = require("mongodb");
 const cors = require("cors");
 
+const { getRoomsAsync } = require("./Controllers/GetRooms");
+const { addRoomsAsync } = require("./Controllers/AddRooms");
+
 const app = express();
 const port = 3001;
 
@@ -13,10 +16,8 @@ app.use(cors());
 // MongoDB connection URI
 const uri =
   "mongodb+srv://idkr5234:DSos7I5Pail1TuJe@soa.o9omsdr.mongodb.net/?retryWrites=true&w=majority&appName=SOA";
-
-// Database Name
 const dbName = "SOA";
-const collectionName = "salle"; // Name of your collection
+const collectionName = "salle";
 
 // Connect to MongoDB
 const client = new MongoClient(uri, {
@@ -26,7 +27,6 @@ const client = new MongoClient(uri, {
 
 async function connectToMongo() {
   try {
-    // Connect to the MongoDB client
     await client.connect();
     console.log("Connected to MongoDB");
   } catch (error) {
@@ -35,36 +35,27 @@ async function connectToMongo() {
 }
 connectToMongo();
 
-// getRooms function  (Idriss)
-const { getRooms } = require("./controllers/GetRooms");
-
+// Get rooms
 app.get("/api/rooms", async (req, res) => {
   try {
-    const rooms = await getRooms();
-    console.log(rooms);
+    const rooms = await getRoomsAsync();
     res.json(rooms);
   } catch (error) {
     console.error("Error retrieving rooms:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
-//
 
-// Add a room to the database (Idriss)
+// Add a room
 app.post("/api/rooms", async (req, res) => {
   try {
-    const room = req.body;
-    const result = await client
-      .db(dbName)
-      .collection(collectionName)
-      .insertOne(room);
-    res.json(result);
+    await addRoomsAsync(req.body);
+    res.json({ message: "Room added successfully" });
   } catch (error) {
     console.error("Error adding room:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
-//
 
 // Start the server
 app.listen(port, () => {

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./publier.css";
-import { useState } from "react";
+import { firebaseConfig } from "../../../firebase";
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
 
 function Publier() {
   const [name, setName] = useState("");
@@ -9,55 +11,87 @@ function Publier() {
   const [localisation, setLocalisation] = useState("");
   const [size, setSize] = useState("");
   const [capacity, setCapacity] = useState("");
-  const [photos, setPhotos] = useState("");
+  const [photoFile, setPhotoFile] = useState(null);
+
+  // Initialize Firebase app
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  } else {
+    firebase.app(); // if already initialized, use that one
+  }
+
+  // Get a reference to the storage service
+  const storage = firebase.storage();
 
   const handleName = (e) => {
     setName(e.target.value);
   };
+
   const handleDescription = (e) => {
     setDescription(e.target.value);
   };
+
   const handlePrice = (e) => {
     setPrice(e.target.value);
   };
+
   const handleLocalisation = (e) => {
     setLocalisation(e.target.value);
   };
+
   const handleSize = (e) => {
     setSize(e.target.value);
   };
+
   const handleCapacity = (e) => {
     setCapacity(e.target.value);
   };
-  const handlePhotos = (e) => {
-    setPhotos(e.target.value);
+
+  const handlePhotoChange = (e) => {
+    setPhotoFile(e.target.files[0]);
   };
-  const handlePublish = () => {
-    console.log("click");
-    fetch("http://localhost:3001/api/rooms", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        Description: description,
-        price_per_hour: price,
-        Location: localisation,
-        size: size,
-        capacity: capacity,
-        photos: photos,
-        //add owner
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+
+  const handlePublish = async () => {
+    try {
+      // Check if photoFile is not null
+      if (!photoFile) {
+        throw new Error("Please select a photo.");
+      }
+
+      // Upload photo to Firebase Storage
+      const photoRef = storage.ref().child(`photos/${photoFile.name}`);
+      await photoRef.put(photoFile);
+      const photoUrl = await photoRef.getDownloadURL();
+
+      // Store metadata with photo URL in MongoDB
+      const response = await fetch("http://localhost:3001/api/rooms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          description: description,
+          price_per_hour: price,
+          location: localisation,
+          size: size,
+          capacity: capacity,
+          photos: photoUrl,
+          // Add other fields as needed
+        }),
       });
+
+      if (response.ok) {
+        alert("Room added successfully");
+      } else {
+        throw new Error("Failed to publish room");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message);
+    }
   };
+
   return (
     <div>
       <h1>Publier</h1>
@@ -99,10 +133,10 @@ function Publier() {
           onChange={handleCapacity}
         />
         <input
-          type="text"
-          placeholder="Photos..."
+          type="file"
+          accept="image/*"
           className="fieldss"
-          onChange={handlePhotos}
+          onChange={handlePhotoChange}
         />
       </div>
       <button className="Publish" onClick={handlePublish}>
@@ -111,4 +145,5 @@ function Publier() {
     </div>
   );
 }
+
 export default Publier;

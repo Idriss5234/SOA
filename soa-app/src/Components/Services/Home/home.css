@@ -3,3 +3,8 @@
   grid-template-columns: repeat(3, 1fr); /* Three columns with equal width */
   gap: 20px; /* Gap between grid items */
 }
+.bodyy {
+  overflow-y: auto; /* This enables vertical scrolling */
+  height: 100%; /* Set the height of the content container */
+  padding: 20px; /* Add padding to the content container */
+}
