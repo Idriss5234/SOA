@@ -7,21 +7,25 @@ import Book from "./Components/Services/Réserver/Réserver";
 import Reservations from "./Components/Services/Mes Réservations/mes_res";
 import Bottom from "./Components/Elements/BottomBar/Bottom";
 import "./App.css";
+import SearchContext from "./Components/Elements/Contexts/SearchContext";
 
 function App() {
+  const [SearchQuery, setSearchQuery] = React.useState("");
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
-        <Routes>
-          <Route path="/Home" element={<Home />} />
-          <Route path="/Post" element={<Post />} />
-          <Route path="/Book" element={<Book />} />
-          <Route path="/Reservations" element={<Reservations />} />
-        </Routes>
-        <Bottom />
-      </div>
-    </Router>
+    <SearchContext.Provider value={{ SearchQuery, setSearchQuery }}>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <Routes>
+            <Route path="/Home" element={<Home />} />
+            <Route path="/Post" element={<Post />} />
+            <Route path="/Book" element={<Book />} />
+            <Route path="/Reservations" element={<Reservations />} />
+          </Routes>
+          <Bottom />
+        </div>
+      </Router>
+    </SearchContext.Provider>
   );
 }
 

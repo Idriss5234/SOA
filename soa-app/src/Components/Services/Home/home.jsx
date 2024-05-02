@@ -1,11 +1,12 @@
-// Home.js
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Card from "../../Elements/Card/Card";
-import Bottom from "../../Elements/BottomBar/Bottom";
 import "./home.css";
 
 function Home() {
   const [rooms, setRooms] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
     // Fetch room data from the API
@@ -15,12 +16,55 @@ function Home() {
       .catch((error) => console.error("Error fetching rooms:", error));
   }, []);
 
+  console.log("Rooms:", rooms);
+
+  // Function to handle search
+  const handleSearch = () => {
+    // Filter rooms based on searchQuery
+    const filteredRooms = rooms.filter(
+      (room) =>
+        room.name && room.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // Update the state with filtered rooms
+    setRooms(filteredRooms);
+  };
+
+  // Function to handle page refresh
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="bodyy">
       <div className="home">
-        <h1>Home</h1>
+        <h1>
+          <div className="searchbar">
+            <input
+              className="search-input"
+              variant="outlined"
+              fullWidth
+              label="Search"
+              placeholder="  Search..."
+              value={searchQuery} // Bind input value to searchQuery state
+              onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on input change
+            />
+            <button
+              type="button"
+              className="search-button"
+              onClick={handleSearch} // Call handleSearch function on button click
+            >
+              Search
+            </button>
+            {/* Add the refresh button */}
+            <button className="search-button" onClick={handleRefresh}>
+              Refresh
+            </button>
+          </div>
+        </h1>
+
         <div className="cards">
-          {/* Check if rooms is an array before using map */}
+          {/* Render rooms */}
           {Array.isArray(rooms) &&
             rooms.map((room) => <Card key={room._id} room={room} />)}
         </div>

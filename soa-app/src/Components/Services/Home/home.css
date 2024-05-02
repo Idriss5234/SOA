@@ -8,3 +8,7 @@
   height: 100%; /* Set the height of the content container */
   padding: 20px; /* Add padding to the content container */
 }
+.searchbar {
+  display: flex;
+  justify-content: center;
+}
