@@ -12,3 +12,21 @@
   display: flex;
   justify-content: center;
 }
+.filter-button {
+  margin: 10px;
+  background-color: rgb(192, 192, 255);
+  width: 150px;
+  border-radius: 15px;
+  cursor: pointer;
+  height: 30px;
+  border-color: rgb(192, 192, 255);
+}
+.filter-button:hover {
+  background-color: rgb(138, 138, 254);
+  color: white;
+}
+.filter-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 10px;
+}
