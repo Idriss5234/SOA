@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser')
 
 const { getRoomsAsync } = require("./Controllers/GetRooms");
 const { addRoomsAsync } = require("./Controllers/AddRooms");
-const { getRoomById } = require("./Controllers/getRoomsById.js");
+const { getRoomById } = require("./Controllers/getRoomById");
 const app = express();
 const port = 3001;
 
