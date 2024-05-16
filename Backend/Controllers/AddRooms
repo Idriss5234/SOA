@@ -16,9 +16,9 @@ async function addRoomsAsync(room) {
   try {
     await client.connect();
     const result = await client
-      .db(dbName)
+      .db(dbName) 
       .collection(collectionName)
-      .insertOne(room);
+      .insertOne(room); 
     return result;
   } catch (error) {
     console.error("Error adding room:", error);

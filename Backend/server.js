@@ -24,26 +24,26 @@ const uri =
 // const collectionName = "salle";
 
 // database connection
-mongoose.connect(uri)
-.then(() => console.log('Database Connected'))
-.catch((err) => console.log('Database not connected', err))
+// mongoose.connect(uri)
+// .then(() => console.log('Database Connected'))
+// .catch((err) => console.log('Database not connected', err))
 
 
 // Connect to MongoDB
-// const client = new MongoClient(uri, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-// async function connectToMongo() {
-//   try {
-//     await client.connect();
-//     console.log("Connected to MongoDB");
-//   } catch (error) {
-//     console.error("Error connecting to MongoDB:", error);
-//   }
-// }
-// connectToMongo();
+async function connectToMongo() {
+  try {
+    await client.connect();
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  }
+}
+connectToMongo();
 
 
 app.use('/', require('./routes/authRoutes'))
