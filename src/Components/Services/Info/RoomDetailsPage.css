@@ -1,0 +1,26 @@
+.room-details-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .room-info {
+    flex: 1;
+  }
+  .room-image {
+    flex: 2;
+    margin-right: 20px;
+  }
+  
+  
+  
+  .room-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  

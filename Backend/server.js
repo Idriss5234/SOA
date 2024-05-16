@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser')
 
 const { getRoomsAsync } = require("./Controllers/GetRooms");
 const { addRoomsAsync } = require("./Controllers/AddRooms");
-
+const { getRoomById } = require("./Controllers/getRoomsById.js");
 const app = express();
 const port = 3001;
 
@@ -67,6 +67,21 @@ app.post("/api/rooms", async (req, res) => {
   } catch (error) {
     console.error("Error adding room:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+});
+// get room by id
+
+app.get("/api/rooms/:roomId", async (req, res) => {
+  try {
+    const roomId = req.params.roomId;
+    const room = await getRoomById(roomId); // Define a function to get room by ID
+    if (!room) {
+      return res.status(404).json({ error: "Room not found" });
+    }
+    res.json(room);
+  } catch (error) {
+    console.error("Error fetching room details:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

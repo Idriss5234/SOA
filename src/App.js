@@ -14,6 +14,7 @@ import axios from 'axios'
 import {Toaster} from 'react-hot-toast'
 import { UserContextProvider } from './Components/Services/Auth/context/userContext'
 import Dashboard from "./Components/Services/Auth/pages/Dashboard";
+import RoomDetailsPage from "./Components/Services/Info/RoomDetailsPage"
 
 axios.defaults.baseURL = 'http://localhost:3001'
 axios.defaults.withCredentials = true
@@ -40,6 +41,7 @@ function App() {
             <Route path="/Post" element={<Post />} />
             <Route path="/Book" element={<Book />} />
             <Route path="/Reservations" element={<Reservations />} />
+            <Route path="/rooms/:id" element={<RoomDetailsPage/>} />
             
           </Routes>
           <Bottom />
