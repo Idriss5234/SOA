@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Card from "../../Elements/Card/Card";
 import "./home.css";
-import {useContext} from "react"
-import { UserContext } from "../../Services/Auth/context/userContext"
+import { useContext } from "react";
 
 function Home() {
   const [rooms, setRooms] = useState([]);
@@ -17,7 +16,6 @@ function Home() {
   const [city, setCity] = useState("");
 
   const location = useLocation();
-  const {user} = useContext(UserContext)
 
   useEffect(() => {
     // Fetch room data from the API
@@ -69,122 +67,96 @@ function Home() {
   };
 
   return (
-    <div className="bodyy">
-      <div className="home">
-        <h1>
-          {!showFilters && (
-            <div className="searchbar">
-              <input
-                className="search-input"
-                variant="outlined"
-                fullWidth
-                label="Search"
-                placeholder="  Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button
-                type="button"
-                className="search-button"
-                onClick={handleSearch}
-              >
-                Search
-              </button>
-              <button className="search-button" onClick={handleRefresh}>
-                Refresh
-              </button>
-              <button className="search-button" onClick={toggleFilters}>
-                Show Filters
-              </button>
-            </div>
-          )}
-          {showFilters && (
-            <div className="filterbar">
-              <button className="search-button" onClick={toggleFilters}>
-                Hide Filters
-              </button>
-              <input
-                type="text"
-                placeholder=" Minimum Size in m2...."
-                className="search-input"
-                value={minSize}
-                onChange={(e) => setMinSize(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder=" Maximum Size in m2...."
-                className="search-input"
-                value={maxSize}
-                onChange={(e) => setMaxSize(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder=" Minimum price/hour...."
-                className="search-input"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder=" Maximum price/hour...."
-                className="search-input"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder=" Max Capacity...."
-                className="search-input"
-                value={capacity}
-                onChange={(e) => setCapacity(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder=" City...."
-                className="search-input"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-              />
-              <button className="filter-button" onClick={handleFilter}>
-                Filter
-              </button>
-            </div>
-          )}
-  return (<>
-    <div>{!!user && (<h1>Welcome {user.name} !</h1>)}</div>
-    <div className="bodyy">
-      <div className="home">
-        <h1>
-          <div className="searchbar">
-            <input
-              className="search-input"
-              variant="outlined"
-              fullWidth
-              label="Search"
-              placeholder="  Search..."
-              value={searchQuery} // Bind input value to searchQuery state
-              onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on input change
-            />
-            <button
-              type="button"
-              className="search-button"
-              onClick={handleSearch} // Call handleSearch function on button click
-            >
-              Search
-            </button>
-            {/* Add the refresh button */}
-            <button className="search-button" onClick={handleRefresh}>
-              Refresh
-            </button>
+    <>
+      <div className="bodyy">
+        <div className="home">
+          <h1>
+            {!showFilters && (
+              <div className="searchbar">
+                <input
+                  className="search-input"
+                  variant="outlined"
+                  fullWidth
+                  label="Search"
+                  placeholder="  Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="search-button"
+                  onClick={handleSearch}
+                >
+                  Search
+                </button>
+                <button className="search-button" onClick={handleRefresh}>
+                  Refresh
+                </button>
+                <button className="search-button" onClick={toggleFilters}>
+                  Show Filters
+                </button>
+              </div>
+            )}
+            {showFilters && (
+              <div className="filterbar">
+                <button className="search-button" onClick={toggleFilters}>
+                  Hide Filters
+                </button>
+                <input
+                  type="text"
+                  placeholder=" Minimum Size in m2...."
+                  className="search-input"
+                  value={minSize}
+                  onChange={(e) => setMinSize(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder=" Maximum Size in m2...."
+                  className="search-input"
+                  value={maxSize}
+                  onChange={(e) => setMaxSize(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder=" Minimum price/hour...."
+                  className="search-input"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder=" Maximum price/hour...."
+                  className="search-input"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder=" Max Capacity...."
+                  className="search-input"
+                  value={capacity}
+                  onChange={(e) => setCapacity(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder=" City...."
+                  className="search-input"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                />
+                <button className="filter-button" onClick={handleFilter}>
+                  Filter
+                </button>
+              </div>
+            )}
+          </h1>
+          <div className="cards">
+            {/* Render rooms */}
+            {Array.isArray(rooms) &&
+              rooms.map((room) => <Card key={room._id} room={room} />)}
           </div>
-
-        <div className="cards">
-          {/* Render rooms */}
-          {Array.isArray(rooms) &&
-            rooms.map((room) => <Card key={room._id} room={room} />)}
         </div>
       </div>
-    </div>
     </>
   );
 }

@@ -4,10 +4,12 @@ import { Link, useLocation, useHistory } from "react-router-dom";
 import "./Navbar.css"; // Import the CSS file for Navbar styling
 import SearchContext from "../Contexts/SearchContext";
 import image from "../../../logosoa.png";
+import { UserContext } from "../../Services/Auth/context/userContext";
 
 function Navbar() {
-
   const location = useLocation();
+  const { user } = useContext(UserContext);
+
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
   const handleSearch = () => {
@@ -16,6 +18,7 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="links">
+        <div>{!!user && <h1>Welcome {user.name} !</h1>}</div>
         <Link to="./Home" className="nav-link" id="home">
           Home
         </Link>

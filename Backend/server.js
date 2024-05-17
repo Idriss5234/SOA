@@ -1,36 +1,52 @@
 // server.js
 const express = require("express");
 const { MongoClient } = require("mongodb");
-const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const router = express.Router();
 const cors = require("cors");
+// const mongoose = require('mongoose')
 const cookieParser = require("cookie-parser");
 
 const { getRoomsAsync } = require("./Controllers/GetRooms");
 const { addRoomsAsync } = require("./Controllers/AddRooms");
 const { getRoomById } = require("./Controllers/getRoomById");
-
 const app = express();
 const port = 3001;
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 // MongoDB connection URI
-const uri = "mongodb+srv://idkr5234:DSos7I5Pail1TuJe@soa.o9omsdr.mongodb.net/SOA?retryWrites=true&w=majority";
+const uri =
+  "mongodb+srv://idkr5234:DSos7I5Pail1TuJe@soa.o9omsdr.mongodb.net/?retryWrites=true&w=majority&appName=SOA";
+// const dbName = "SOA";
+// const collectionName = "salle";
 
-// Connect to MongoDB using Mongoose
-mongoose.connect(uri, {
+// database connection
+// mongoose.connect(uri)
+// .then(() => console.log('Database Connected'))
+// .catch((err) => console.log('Database not connected', err))
+
+// Connect to MongoDB
+const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-})
-.then(() => console.log("Connected to MongoDB"))
-.catch((error) => console.error("Error connecting to MongoDB:", error));
+});
 
-// Routes
-app.use('/', require('./routes/authRoutes'));
+async function connectToMongo() {
+  try {
+    await client.connect();
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  }
+}
+connectToMongo();
+
+app.use("/", require("./routes/authRoutes"));
 
 // Get rooms
 app.get("/api/rooms", async (req, res) => {
@@ -53,12 +69,12 @@ app.post("/api/rooms", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+// get room by id
 
-// Get room by id
 app.get("/api/rooms/:roomId", async (req, res) => {
   try {
     const roomId = req.params.roomId;
-    const room = await getRoomById(roomId);
+    const room = await getRoomById(roomId); // Define a function to get room by ID
     if (!room) {
       return res.status(404).json({ error: "Room not found" });
     }
@@ -73,3 +89,5 @@ app.get("/api/rooms/:roomId", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+module.exports = router;
