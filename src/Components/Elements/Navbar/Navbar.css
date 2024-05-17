@@ -66,3 +66,13 @@
 .search-button:hover {
   background-color: #0056b3; /* Search button background color on hover */
 }
+.out {
+  color: #007bff;
+  border-radius: 3em;
+  width: 10em;
+}
+
+.username {
+  text-decoration: solid;
+  font-size: large;
+}

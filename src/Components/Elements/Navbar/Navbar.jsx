@@ -18,7 +18,8 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="links">
-        <div>{!!user && <h1>Welcome {user.name} !</h1>}</div>
+        <img src={image} height={50} width={100} alt="" />
+
         <Link to="./Home" className="nav-link" id="home">
           Home
         </Link>
@@ -33,7 +34,7 @@ function Navbar() {
         </Link>
       </div>
       <div>
-        <img src={image} height={50} width={100} alt="" />
+        <div>{!!user && <h1>Welcome {user.name} !</h1>}</div>
       </div>
     </nav>
   );

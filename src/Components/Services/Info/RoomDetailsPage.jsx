@@ -5,6 +5,7 @@ import "./RoomDetailsPage.css";
 function RoomDetailsPage() {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -23,6 +24,18 @@ function RoomDetailsPage() {
   if (!room) {
     return <div>Loading...</div>;
   }
+  const allPhotos = [room.photos, room.photos2].flat();
+
+  const handleNextImage = () => {
+    const nextIndex = (currentImageIndex + 1) % allPhotos.length;
+    setCurrentImageIndex(nextIndex);
+  };
+
+  const handlePrevImage = () => {
+    const prevIndex =
+      currentImageIndex === 0 ? allPhotos.length - 1 : currentImageIndex - 1;
+    setCurrentImageIndex(prevIndex);
+  };
 
   return (
     <div className="room-details-container">
@@ -40,12 +53,29 @@ function RoomDetailsPage() {
         <span id="valuess">{room.capacity}</span>
         <span id="titre">Description: </span>
         <span id="valuess">{room.description}</span>
+        <span id="titre">Services: </span>
+        {room.services.map((service, index) => (
+          <div key={index}>
+            <span>
+              {service.name} : {service.price} MAD
+            </span>
+          </div>
+        ))}
         <br />
       </div>
 
       <div className="room-image">
-        <img src={room.photos} alt={room.name} />
-        <button id="reservee">Reserver</button>
+        <img src={allPhotos[currentImageIndex]} alt={room.name} />
+        {allPhotos.length > 1 && ( // Only show navigation if multiple images
+          <>
+            <button id="prev-image" onClick={handlePrevImage}>
+              &lt;
+            </button>
+            <button id="next-image" onClick={handleNextImage}>
+              &gt;
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
