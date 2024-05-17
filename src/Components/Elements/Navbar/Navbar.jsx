@@ -6,6 +6,7 @@ import SearchContext from "../Contexts/SearchContext";
 import image from "../../../logosoa.png";
 
 function Navbar() {
+
   const location = useLocation();
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
 

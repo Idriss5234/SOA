@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Card from "../../Elements/Card/Card";
 import "./home.css";
+import {useContext} from "react"
+import { UserContext } from "../../Services/Auth/context/userContext"
 
 function Home() {
   const [rooms, setRooms] = useState([]);
@@ -13,6 +15,9 @@ function Home() {
   const [maxPrice, setMaxPrice] = useState("");
   const [capacity, setCapacity] = useState("");
   const [city, setCity] = useState("");
+
+  const location = useLocation();
+  const {user} = useContext(UserContext)
 
   useEffect(() => {
     // Fetch room data from the API
@@ -145,7 +150,33 @@ function Home() {
               </button>
             </div>
           )}
-        </h1>
+  return (<>
+    <div>{!!user && (<h1>Welcome {user.name} !</h1>)}</div>
+    <div className="bodyy">
+      <div className="home">
+        <h1>
+          <div className="searchbar">
+            <input
+              className="search-input"
+              variant="outlined"
+              fullWidth
+              label="Search"
+              placeholder="  Search..."
+              value={searchQuery} // Bind input value to searchQuery state
+              onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on input change
+            />
+            <button
+              type="button"
+              className="search-button"
+              onClick={handleSearch} // Call handleSearch function on button click
+            >
+              Search
+            </button>
+            {/* Add the refresh button */}
+            <button className="search-button" onClick={handleRefresh}>
+              Refresh
+            </button>
+          </div>
 
         <div className="cards">
           {/* Render rooms */}
@@ -154,6 +185,7 @@ function Home() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

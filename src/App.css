@@ -16,6 +16,7 @@ body {
 .App {
   height: 100%;
   overflow-y: auto; /* Enable vertical scrolling */
+
 }
 
 .App-logo {
@@ -52,3 +53,4 @@ body {
     transform: rotate(360deg);
   }
 }
+

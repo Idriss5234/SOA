@@ -1,6 +1,7 @@
 // Card.js
 import React from "react";
 import "./Card.css";
+import { Link } from "react-router-dom"; 
 
 function Card({ room }) {
   return (
@@ -19,7 +20,10 @@ function Card({ room }) {
         {/* Assuming your room object has a field named price */}
         <p>Owned by :{room.owner}</p>{" "}
         {/* Assuming your room object has a field named owner */}
-        <button>Details</button>
+
+        <Link to={`/rooms/${room._id}`}>
+          <button>Details</button>
+        </Link>
       </div>
     </div>
   );
