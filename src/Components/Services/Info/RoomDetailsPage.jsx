@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import "./RoomDetailsPage.css";
+import Calendar from "./Calendar";
 function RoomDetailsPage() {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
@@ -75,8 +76,8 @@ function RoomDetailsPage() {
               &gt;
             </button>
           </>
-        )}
-      </div>
+        )}<Calendar />
+      </div> 
     </div>
   );
 }
