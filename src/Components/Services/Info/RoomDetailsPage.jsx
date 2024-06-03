@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import "./RoomDetailsPage.css";
+import { Link } from "react-router-dom";
+
 function RoomDetailsPage() {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
@@ -76,6 +78,11 @@ function RoomDetailsPage() {
             </button>
           </>
         )}
+        <div>
+          <Link to={`/book/${room._id}`}>
+            <button className="reserever-button">Réserver</button>
+          </Link>
+        </div>
       </div>
     </div>
   );
