@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import "./RoomDetailsPage.css";
 import { Link } from "react-router-dom";
 
+import Calendar from "./Calendar";
+
 function RoomDetailsPage() {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
@@ -78,6 +80,7 @@ function RoomDetailsPage() {
             </button>
           </>
         )}
+        <Calendar />
         <div>
           <Link to={`/book/${room._id}`}>
             <button className="reserever-button">Réserver</button>
