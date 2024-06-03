@@ -1,57 +1,53 @@
-/* RoomDetailsPage.css */
-
 .room-details-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.room-content {
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  width: 100%;
-  max-width: 800px;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  padding: 40px;
+  flex-wrap: wrap;
 }
 
 .room-info {
-  flex: 1;
-  margin-right: 20px;
+  width: 40%;
+  padding: 30px;
+  border-radius: 20px;
+  background-color: #f4f4f4;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .room-info h2 {
-  font-size: 2em;
-  margin-bottom: 10px;
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.room-info div {
-  margin-bottom: 10px;
-}
-
-#titre {
-  font-weight: bold;
+.room-info span {
+  display: flex;
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #666;
 }
 
 #valuess {
-  font-weight: normal;
+  margin-left: auto;
+}
+
+.room-info .owner-label {
+  font-weight: bold;
   color: #555;
 }
 
 .room-image {
   flex: 1;
+  max-width: 50%;
+  margin-left: 20px;
   position: relative;
 }
 
 .room-image img {
   width: 100%;
   height: auto;
-  border-radius: 10px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 #prev-image,
@@ -59,11 +55,11 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.7);
   border: none;
-  padding: 10px;
   cursor: pointer;
+  font-size: 24px;
+  padding: 10px;
   border-radius: 50%;
 }
 
@@ -77,45 +73,48 @@
 
 .reservation-container {
   width: 100%;
-  max-width: 800px;
   margin-top: 20px;
-  text-align: center;
 }
 
 .reservation-container h3 {
+  font-size: 22px;
   margin-bottom: 10px;
 }
 
 .reservation-container .react-datepicker-wrapper {
   display: inline-block;
-  margin: 5px;
+  margin-right: 10px;
 }
 
 .reservation-container button {
-  margin-top: 10px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #5a6bff;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
+  font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
 .reservation-container button:hover {
-  background-color: #0056b3;
+  background-color: #b7d8ff;
 }
 
-.reserver-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
+#titre {
+  text-decoration: underline;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.reserever-button {
+  margin: 10px;
+  background-color: rgb(192, 192, 255);
+  width: 150px;
+  border-radius: 15px;
   cursor: pointer;
-  text-decoration: none;
-}
-
-.reserver-button:hover {
-  background-color: #218838;
+  height: 30px;
+  border-color: rgb(192, 192, 255);
+  margin-top: 50px;
 }

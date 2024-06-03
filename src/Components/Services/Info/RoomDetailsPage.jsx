@@ -60,7 +60,7 @@ function RoomDetailsPage() {
       setReservationMessage("Reservation successful!");
     } catch (error) {
       console.error("Error making reservation:", error);
-      setReservationMessage("Failed to make reservation. Please try again.");
+      setReservationMessage("Please chose another date range.");
     }
   };
 

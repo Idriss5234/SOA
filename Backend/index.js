@@ -10,7 +10,7 @@ const app = express();
 
 
 mongoose
-  .connect("mongodb+srv://ayoub:PqUnOSEwemlds4lC@cluster0.l7iioc4.mongodb.net/SOA?retryWrites=true&w=majority&appName=Cluster0", {
+  .connect("mongodb+srv://idkr5234:DSos7I5Pail1TuJe@soa.o9omsdr.mongodb.net/SOA?retryWrites=true&w=majority&appName=SOA", {
     useNewUrlParser : true, 
     useUnifiedTopology : true,
   })

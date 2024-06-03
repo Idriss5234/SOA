@@ -32,9 +32,6 @@ function Navbar() {
         <Link to="/Post" className="nav-link">
           Post
         </Link>
-        <Link to="/Book" className="nav-link">
-          Book
-        </Link>
         <Link to="/Reservations" className="nav-link">
           My Reservations
         </Link>
