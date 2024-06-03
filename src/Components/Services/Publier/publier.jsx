@@ -3,12 +3,13 @@ import "./publier.css";
 import { firebaseConfig } from "../../../firebase";
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
-import { UserContext } from "../../Services/Auth/context/userContext";
+import { UserContext,UserProvider } from "../../Services/Auth/context/userContext";
 import { useContext } from "react";
+import axios from "axios";
 
 function Publier() {
-  const { user } = useContext(UserContext);
-
+  const user = useContext(UserContext);
+  console.log(user);
   const [services, setServices] = useState([]);
 
   const handleAddService = () => {
@@ -82,7 +83,7 @@ function Publier() {
   const handlePublish = async () => {
     try {
       // Check if photoFile is not null
-      if (!photoFile && !photoFile2) {
+      if (!photoFile || !photoFile2) {
         throw new Error("Please select photos.");
       }
 
@@ -95,30 +96,25 @@ function Publier() {
       await photoRef.put(photoFile);
       const photoUrl = await photoRef.getDownloadURL();
 
-      // Store metadata with photo URL in MongoDB
-      const response = await fetch("http://localhost:3001/api/rooms", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-          description: description,
-          price_per_hour: price,
-          location: localisation,
-          owner: user.name,
-          size: size,
-          capacity: capacity,
-          photos: photoUrl,
-          photos2: photoUrl2,
-          services: services.map((service) => ({
+      // Send request to create post
+      const response = await axios.post("http://localhost:3001/api/Create", {
+        title: name,
+        description:description,
+        price_per_hour: price,
+        location: localisation,
+        owner: user.user.user.name,
+        owner_id : user.user.user._id,
+        size:size,
+        capacity:capacity,
+        photo1: photoUrl,
+        photo2: photoUrl2,
+        services: services.map((service) => ({
             name: service.name,
             price: service.price,
           })),
-        }),
       });
 
-      if (response.ok) {
+      if (response.status === 201) {
         alert("Room added successfully");
       } else {
         throw new Error("Failed to publish room");
@@ -128,7 +124,6 @@ function Publier() {
       alert(error.message);
     }
   };
-
   return (
     <div>
       <h1>Publier</h1>

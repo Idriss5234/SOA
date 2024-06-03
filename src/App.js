@@ -28,10 +28,7 @@ function App() {
       <SearchContext.Provider value={{ SearchQuery, setSearchQuery }}>
         <Router>
           <div className="App">
-            {/* Condition to not display Navbar on Login and Register pages */}
-            {window.location.pathname !== '/' && window.location.pathname !== '/register' && (
-              <Navbar />
-            )}
+            <Navbar />
             <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />

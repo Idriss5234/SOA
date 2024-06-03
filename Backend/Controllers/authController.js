@@ -1,199 +1,136 @@
-const User = require('../models/user')
-const {hashPassword, comparePassword} = require('../helpers/auth')
+const User = require("../Models/UserModel");
+const { createSecretToken } = require("../util/SecretToken");
+const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
-const { MongoClient } = require("mongodb");
 
-const uri =
-  "mongodb+srv://idkr5234:DSos7I5Pail1TuJe@soa.o9omsdr.mongodb.net/?retryWrites=true&w=majority&appName=SOA";
-const dbName = "SOA";
-const collectionName = "users";
-const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-const test = (req, res) => {
-    res.json('test is working')
-}
-
-// register endpoint
-// const registerUser = async (req,res) => {
-//     try {
-//         const {name, email, password} = req.body
-//         //Check if name was entered
-//         if(!name) {
-//             return res.json({
-//                 error: 'name is required'
-//             })
-//         }
-//         // Check if password is good
-//         if (!password || password.length < 6) {
-//             return res.json({
-//                 error: 'Password is required and should be at least 6 characters long'
-//             })
-//         }
-//         //Check email
-//         const exist = await User.findOne({email})
-//         if (exist) {
-//             return res.json({
-//                 error: 'Email is already taken'
-//             })
-//         }
-
-//         const hashedPassword = await hashPassword(password)
-//         // Create user in database
-//         const user = await User.create({
-//             name,
-//             email, 
-//             password: hashedPassword,
-//         })
-
-//         return res.json(user)
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-// Fonction pour enregistrer un nouvel utilisateur
-const registerUser = async (req, res) => {
-    try {
-      await client.connect();
-  
-      const database = client.db("SOA");
-      const collection = database.collection("users"); // Nom de votre collection d'utilisateurs
-  
-      const { name, email, password } = req.body;
-  
-      // Vérification des champs requis
-      if (!name) {
-        return res.json({ error: 'Le nom est requis' });
-      }
-  
-      if (!password || password.length < 6) {
-        return res.json({ error: 'Le mot de passe est requis et doit comporter au moins 6 caractères' });
-      }
-  
-      // Vérification de l'existence de l'email dans la base de données
-      const existingUser = await collection.findOne({ email });
-      if (existingUser) {
-        return res.json({ error: 'Cet email est déjà utilisé' });
-      }
-  
-      // Hachage du mot de passe
-      // const hashedPassword = await hashPassword(password);
-  
-      // Création d'un nouvel utilisateur dans la base de données
-      const newUser = {
-        name,
-        email,
-        password
-      };
-  
-      const result = await collection.insertOne(newUser);
-      console.log("Utilisateur enregistré avec succès:", result.insertedId);
-  
-      // Retourner les détails de l'utilisateur créé
-      res.json({
-        _id: result.insertedId,
-        name: newUser.name,
-        email: newUser.email
-      });
-    } catch (error) {
-      console.error("Erreur lors de l'enregistrement de l'utilisateur:", error);
-      res.status(500).json({ error: 'Erreur lors de l\'enregistrement de l\'utilisateur' });
-    } finally {
-      // Fermeture de la connexion à la base de données
-      await client.close();
+module.exports.Signup = async (req, res, next) => {
+  try {
+    const { name ,email, password } = req.body;
+    // Check if email, password, and username are provided
+    if (!email || !password || !name) {
+      return res.status(400).json({ message: "Email, password, and username are required." });
     }
-  };
-  
-  module.exports = registerUser;
 
-//login endpoint
-// const loginUser = async (req,res) => {
-// try {
-//     const {email, password}= req.body
+    // Log the inputs for debugging
+    console.log("Received data: ", { name ,email, password});
 
-//     // Check if user exists
-//     const user = await User.findOne({email})
-//     if(!user) {
-//         return res.json({
-//             error: 'No user found'
-//         })
-//     }
+    const existingUser = await User.findOne({ email });
 
-//     //check if passwords match
-//     const match = await comparePassword(password, user.password)
-//     if(match) {
-//         jwt.sign({email: user.email, id: user._id, name: user.name}, '12345678', {}, (err,token) => {
-//             if(err) throw err
-//             res.cookie('token',token).json(user)
-//         })
-//     }
-//     if(!match) {
-//         res.json({
-//             error: "Passwords do not match"
-//         })
-//     }
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
+    }
 
-// } catch (error) {
-//     console.log(error)
-// }
-// }
-const loginUser = async (req, res) => {
-    try {
-      await client.connect();
-  
-      const database = client.db("SOA");
-      const collection = database.collection("users"); // Nom de votre collection d'utilisateurs
-  
+    // Check if password is a valid string
+    if (typeof password !== 'string') {
+      return res.status(400).json({ message: "Password must be a string." });
+    }
+
+    console.log("Password before hashing:", password);
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    console.log("Hashed password:", hashedPassword);
+
+    const user = await User.create({ name , email, password});
+
+    const token = createSecretToken(user._id);
+
+    res.cookie("token", token, {
+      withCredentials: true,
+      httpOnly: false,
+    });
+
+    res.status(201).json({ message: "User signed in successfully", success: true, user });
+
+    next();
+  } catch (error) {
+    console.error("Error during signup:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports.Login = async (req, res, next) => {
+  try {
       const { email, password } = req.body;
-  
-      // Recherche de l'utilisateur par email
-      const user = await collection.findOne({ email });
+
+      console.log('Login request received:', { email });
+
+      if (!email || !password) {
+          console.log('Missing email or password:', { email, password });
+          return res.status(400).json({ message: 'Email and password are required' });
+      }
+
+      const user = await User.findOne({ email });
+
       if (!user) {
-        return res.json({ error: 'Aucun utilisateur trouvé' });
+          console.log('User not found:', { email });
+          return res.status(401).json({ message: 'Incorrect email or password' });
       }
-  
-      // Vérification du mot de passe
-      // const isMatch = await comparePassword(password, user.password);
-      if (password === user.password) {
-        // Génération du jeton JWT
-        const token = jwt.sign({ email: user.email, id: user._id, name: user.name }, '12345678');
-  
-        // Envoi du jeton JWT dans un cookie et des détails de l'utilisateur en réponse JSON
-        res.cookie('token', token).json({
-          _id: user._id,
-          name: user.name,
-          email: user.email
-        });
-      } else {
-        // En cas de non-correspondance du mot de passe
-        res.json({ error: "Les mots de passe ne correspondent pas" });
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'authentification de l'utilisateur:", error);
-      res.status(500).json({ error: 'Erreur lors de l\'authentification de l\'utilisateur' });
-    } finally {
-      // Fermeture de la connexion à la base de données
-      await client.close();
-    }
-  };
 
-const getProfile= (req,res) => {
-    const {token} =req.cookies
-    if(token) {
-        jwt.verify(token,'12345678',{},(err,user) => {
-            if(err) throw err
-            res.json(user)
-        })
+      const auth = (password, userPassword) => {
+        try {
+            // Compare the provided password with the user's password
+            const result = password === userPassword;
+            return result;
+        } catch (error) {
+            // Handle any errors that occur during the comparison
+            console.error('Error during password comparison:', error);
+            throw error; // Throw the error to be handled by the caller
+        }
+    };
+    
+      if (!auth) {
+          console.log('Incorrect password:', { email });
+          return res.status(401).json({ message: 'Incorrect email or password' });
+      }
+
+      const token = createSecretToken(user._id);
+
+      console.log('User logged in successfully:', { email });
+
+      res.cookie('token', token, {
+          withCredentials: true,
+          httpOnly: false,
+      });
+      
+      res.status(201).json({ message: 'User logged in successfully', success: true });
+      next();
+  } catch (error) {
+      console.error('Error during login:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+};
+module.exports.Profile = async (req, res) => {
+  try {
+    const { token } = req.cookies;
+    if (token) {
+      jwt.verify(token, '12345678', async (err, decoded) => {
+        if (err) {
+          return res.status(401).json({ status: false, message: 'Invalid token' });
+        }
+
+        try {
+          const user = await User.findById(decoded.id);
+          if (!user) {
+            return res.status(404).json({ status: false, message: 'User not found' });
+          }
+
+          res.cookie('token', token, {
+            withCredentials: false, // Add withCredentials option
+            httpOnly: false,
+          });
+
+          res.status(200).json({ user });
+        } catch (dbError) {
+          console.error('Database error during profile fetch', dbError);
+          res.status(500).json({ status: false, message: 'Internal server error' });
+        }
+      });
     } else {
-        res.json(null)
+      res.status(401).json({ status: false, message: 'No token provided' });
     }
-}
-
-module.exports = {
-    test,
-    registerUser,
-    loginUser,
-    getProfile
-}
+  } catch (error) {
+    console.error('Error during profile fetch', error);
+    res.status(500).json({ status: false, message: 'Internal server error' });
+  }
+};
