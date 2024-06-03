@@ -4,6 +4,9 @@ import { useParams, Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./RoomDetailsPage.css";
+import { UserContext,UserProvider } from "../../Services/Auth/context/userContext";
+import { useContext } from "react";
+
 function RoomDetailsPage() {
   const user = useContext(UserContext);
   console.log(user);
@@ -113,8 +116,31 @@ function RoomDetailsPage() {
               &gt;
             </button>
           </>
-        )}<Calendar />
-      </div> 
+        )}
+      </div>
+      
+      <div className="reservation-container">
+        <h3>Reserve this room</h3>
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+          placeholderText="Start Date"
+        />
+        <DatePicker
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+          placeholderText="End Date"
+        />
+        <button onClick={handleReservation}>Reserve</button>
+        {reservationMessage && <p>{reservationMessage}</p>}
+      </div>
     </div>
   );
 }
