@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./Components/Elements/Navbar/Navbar";
 import Home from "./Components/Services/Home/home";
@@ -21,7 +21,7 @@ axios.defaults.baseURL = 'http://localhost:3001';
 axios.defaults.withCredentials = true;
 
 function App() {
-  const [SearchQuery, setSearchQuery] = React.useState("");
+  const [SearchQuery, setSearchQuery] = useState("");
 
   return (
     <UserContextProvider>
@@ -38,10 +38,15 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
+  const [key, setKey] = useState(0);
   const hideNavbarRoutes = ["/register", "/"];
 
+  useEffect(() => {
+    setKey(prevKey => prevKey + 1); // Update key to force re-render
+  }, [location]);
+
   return (
-    <>
+    <div key={key}>
       {!hideNavbarRoutes.includes(location.pathname) && <Navbar />}
       <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
       <Routes>
@@ -55,7 +60,7 @@ function AppContent() {
         <Route path="/rooms/:id" element={<RoomDetailsPage />} />
       </Routes>
       <Bottom />
-    </>
+    </div>
   );
 }
 

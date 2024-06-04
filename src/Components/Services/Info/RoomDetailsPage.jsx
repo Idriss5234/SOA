@@ -20,6 +20,7 @@ function RoomDetailsPage() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [reservationMessage, setReservationMessage] = useState("");
+  const [selectedServices, setSelectedServices] = useState([]); // State to store selected services
   console.log(user.user.email);
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -96,6 +97,13 @@ function RoomDetailsPage() {
       setReservationMessage("Please chose another date range.");
     }
   };
+  // Calculate total price
+
+  const hours = Math.abs(endDate - startDate) / 36e5;
+
+  const totalPrice =
+    room.price_per_hour * hours +
+    selectedServices.reduce((total, service) => total + service.price, 0);
 
   return (
     <div className="room-details-container">
@@ -129,9 +137,20 @@ function RoomDetailsPage() {
           <span id="titre">Services: </span>
           {room.services.map((service, index) => (
             <div key={index}>
-              <span>
+              <input
+                type="checkbox"
+                id={service._id}
+                onChange={() =>
+                  setSelectedServices((prevServices) =>
+                    prevServices.includes(service)
+                      ? prevServices.filter((s) => s !== service)
+                      : [...prevServices, service]
+                  )
+                }
+              />
+              <label htmlFor={service._id}>
                 {service.name} : {service.price} MAD
-              </span>
+              </label>
             </div>
           ))}
         </div>
@@ -149,31 +168,42 @@ function RoomDetailsPage() {
             </button>
           </>
         )}
-        
-      <div className="reservation-container">
-        <h3>Reserve this room</h3>
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          selectsStart
-          startDate={startDate}
-          endDate={endDate}
-          placeholderText="Start Date"
-        />
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
-          placeholderText="End Date"
-        />
-        
-        {reservationMessage && <p>{reservationMessage}</p>}
-      </div>
+
+        <div className="reservation-container">
+          <h3>Reserve this room</h3>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
+            placeholderText="Start Date"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={60}
+            dateFormat="MMMM d, yyyy h:mm aa"
+          />
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            placeholderText="End Date"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={60}
+            dateFormat="MMMM d, yyyy h:mm aa"
+          />
+
+          {reservationMessage && <p>{reservationMessage}</p>}
+        </div>
+        <p>Total Price: {totalPrice} MAD</p>
         <div>
-          <button className="reserever-button" onClick={handleReservation}>Reserve</button>
+          <button className="reserever-button" onClick={handleReservation}>
+            Reserve
+          </button>
           <button className="reserever-button" onClick={handleChatButtonClick}>
             {showChat ? "Hide Chat" : "Chat"}
           </button>
@@ -192,7 +222,6 @@ function RoomDetailsPage() {
           )}
         </div>
       </div>
-
     </div>
   );
 }
