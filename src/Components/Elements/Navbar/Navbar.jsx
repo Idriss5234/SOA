@@ -7,7 +7,7 @@ import { UserContext } from "../../Services/Auth/context/userContext";
 
 function Navbar() {
   const location = useLocation();
-  const user = useContext(UserContext);
+  const {user}= useContext(UserContext);
   console.log(typeof(user));
 
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
@@ -38,7 +38,7 @@ function Navbar() {
       </div>
       <div>
         {/* Render the welcome message only if user is logged in */}
-        {isLoggedIn && <h1>Welcome {username}!</h1>}
+        {isLoggedIn && <h1>Welcome {user.user.name}!</h1>}
       </div>
     </nav>
   );

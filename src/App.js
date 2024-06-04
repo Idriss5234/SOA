@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./Components/Elements/Navbar/Navbar";
 import Home from "./Components/Services/Home/home";
 import Post from "./Components/Services/Publier/publier";
@@ -28,23 +28,34 @@ function App() {
       <SearchContext.Provider value={{ SearchQuery, setSearchQuery }}>
         <Router>
           <div className="App">
-            <Navbar />
-            <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
-            <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/" element={<Login />} />
-              <Route path="/Home" element={<Home />} />
-              <Route path="/Post" element={<Post />} />
-              <Route path="/Book" element={<Book />} />
-              <Route path="/Reservations" element={<Reservations />} />
-              <Route path="/rooms/:id" element={<RoomDetailsPage />} />
-            </Routes>
-            <Bottom />
+            <AppContent />
           </div>
         </Router>
       </SearchContext.Provider>
     </UserContextProvider>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+  const hideNavbarRoutes = ["/register", "/"];
+
+  return (
+    <>
+      {!hideNavbarRoutes.includes(location.pathname) && <Navbar />}
+      <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Post" element={<Post />} />
+        <Route path="/Book" element={<Book />} />
+        <Route path="/Reservations" element={<Reservations />} />
+        <Route path="/rooms/:id" element={<RoomDetailsPage />} />
+      </Routes>
+      <Bottom />
+    </>
   );
 }
 

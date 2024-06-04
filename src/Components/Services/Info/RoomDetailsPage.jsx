@@ -4,7 +4,6 @@ import { useParams, Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./RoomDetailsPage.css";
-import Calendar from "./Calendar";
 import mail from "./mail";
 import {
   UserContext,
@@ -12,8 +11,6 @@ import {
 } from "../../Services/Auth/context/userContext";
 
 function RoomDetailsPage() {
-  const User = useContext(UserContext);
-  console.log(user);
   const { id } = useParams();
   const [room, setRoom] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -23,7 +20,7 @@ function RoomDetailsPage() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [reservationMessage, setReservationMessage] = useState("");
-
+  console.log(user.user.email);
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
@@ -63,7 +60,7 @@ function RoomDetailsPage() {
     console.log(recipientEmail);
 
     // Construct the email body
-    const body = `Hi, I'm interested in chatting about the room. Can we discuss further? Email: ${user.email}. Message: ${message}`;
+    const body = `Hi, I'm interested in chatting about the room. Can we discuss further? Email: ${user.user.email}. Message: ${message}`;
 
     // Generate mailto link
     const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(
@@ -79,7 +76,7 @@ function RoomDetailsPage() {
     return <div>Loading...</div>;
   }
 
-  const allPhotos = [room.photos, room.photos2].flat();
+  const allPhotos = [room.photo1, room.photo2].flat();
 
   const handleReservation = async () => {
     if (!startDate || !endDate) {
@@ -89,7 +86,7 @@ function RoomDetailsPage() {
     try {
       await axios.post(`http://localhost:3001/api/Reserve`, {
         post: room._id,
-        creator: user.user.user._id,
+        creator: user.user._id,
         dateStart: startDate.toISOString(),
         dateEnd: endDate.toISOString(),
       });
@@ -152,30 +149,7 @@ function RoomDetailsPage() {
             </button>
           </>
         )}
-        {/* <Calendar /> */}
-        <div>
-          <Link to={`/book/${room._id}`}>
-            <button className="reserever-button">Réserver</button>
-          </Link>
-          <button className="reserever-button" onClick={handleChatButtonClick}>
-            {showChat ? "Hide Chat" : "Chat"}
-          </button>
-          {showChat && (
-            <div className="email-form">
-              <span>FROM: {user.email}</span>
-              <textarea
-                placeholder="Your message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              ></textarea>
-              <button className="reserever-button" onClick={handleSendEmail}>
-                Send
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
+        
       <div className="reservation-container">
         <h3>Reserve this room</h3>
         <DatePicker
@@ -195,9 +169,30 @@ function RoomDetailsPage() {
           minDate={startDate}
           placeholderText="End Date"
         />
-        <button onClick={handleReservation}>Reserve</button>
+        
         {reservationMessage && <p>{reservationMessage}</p>}
       </div>
+        <div>
+          <button className="reserever-button" onClick={handleReservation}>Reserve</button>
+          <button className="reserever-button" onClick={handleChatButtonClick}>
+            {showChat ? "Hide Chat" : "Chat"}
+          </button>
+          {showChat && (
+            <div className="email-form">
+              <span>FROM: {user.user.email}</span>
+              <textarea
+                placeholder="Your message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              ></textarea>
+              <button className="reserever-button" onClick={handleSendEmail}>
+                Send
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
     </div>
   );
 }
