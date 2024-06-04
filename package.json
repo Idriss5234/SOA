@@ -14,6 +14,7 @@
     "assert": "^2.1.0",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "cookie-parser": "^1.4.6",
@@ -21,7 +22,12 @@
     "crypto-browserify": "^3.12.0",
     "date-fns": "^3.6.0",
     "express": "^4.19.2",
+<<<<<<< HEAD
     "firebase": "^10.12.2",
+=======
+    "firebase": "^10.11.1",
+    "js-cookie": "^3.0.5",
+>>>>>>> 84b965adc436e2d6c76b16c5b8a5c5eb9b9928aa
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.3",
@@ -30,6 +36,7 @@
     "process": "^0.11.10",
     "querystring-es3": "^0.2.1",
     "react": "^18.3.0",
+    "react-datepicker": "^6.9.0",
     "react-dom": "^18.3.0",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.23.0",
@@ -44,7 +51,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-backend": "nodemon Backend/server.js",
+    "start-backend": "nodemon Backend/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

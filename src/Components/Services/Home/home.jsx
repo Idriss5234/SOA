@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Card from "../../Elements/Card/Card";
 import "./home.css";
 import { useContext } from "react";
-
+import axios from 'axios';
 function Home() {
   const [rooms, setRooms] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,17 +14,24 @@ function Home() {
   const [maxPrice, setMaxPrice] = useState("");
   const [capacity, setCapacity] = useState("");
   const [city, setCity] = useState("");
+ const fetchPosts = async () => {
+    try {
+        const response = await axios.get('/api/Posts');
+        if (response.data && response.data.success) {
+            console.log(response.data);
+            setRooms(response.data.post_list);
+        } else {
+            console.error('Failed to fetch posts');
+        }
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+    }
+};
 
-  const location = useLocation();
-
-  useEffect(() => {
-    // Fetch room data from the API
-    fetch("http://localhost:3001/api/rooms")
-      .then((response) => response.json())
-      .then((data) => setRooms(data))
-      .catch((error) => console.error("Error fetching rooms:", error));
-  }, []);
-
+// Fetch posts when component mounts
+useEffect(() => {
+    fetchPosts();
+}, []);
   // Function to handle search
   const handleSearch = () => {
     // Filter rooms based on searchQuery

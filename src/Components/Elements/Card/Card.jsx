@@ -7,14 +7,14 @@ function Card({ room }) {
   return (
     <div className="card">
       <img
-        src={room.photos}
+        src={room.photo1}
         width={300}
         height={300}
         alt={room.name} // Assuming your room object has a field named title for the room title
       />
       <div className="card-content">
-        <h3>{room.name}</h3>
-        <p> {room.Location}</p>{" "}
+        <h3>{room.title}</h3>
+        <p> {room.location}</p>{" "}
         {/* Assuming your room object has a field named location */}
         <p>{room.price_per_hour} MAD/hour</p>{" "}
         {/* Assuming your room object has a field named price */}

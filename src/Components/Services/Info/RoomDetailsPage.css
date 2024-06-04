@@ -1,8 +1,9 @@
 .room-details-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
   padding: 40px;
+  flex-wrap: wrap;
 }
 
 .room-info {
@@ -25,8 +26,9 @@
   margin-bottom: 15px;
   color: #666;
 }
+
 #valuess {
-  margin-left: 150px;
+  margin-left: auto;
 }
 
 .room-info .owner-label {
@@ -36,7 +38,9 @@
 
 .room-image {
   flex: 1;
-  max-width: 700px;
+  max-width: 50%;
+  margin-left: 20px;
+  position: relative;
 }
 
 .room-image img {
@@ -46,26 +50,64 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-#reservee {
-  padding: 20px 40px;
+#prev-image,
+#next-image {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+#prev-image {
+  left: 10px;
+}
+
+#next-image {
+  right: 10px;
+}
+
+.reservation-container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.reservation-container h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.reservation-container .react-datepicker-wrapper {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.reservation-container button {
+  padding: 10px 20px;
   background-color: #5a6bff;
   color: #fff;
   border: none;
   border-radius: 10px;
-  font-size: 24px;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
-button:hover {
+.reservation-container button:hover {
   background-color: #b7d8ff;
 }
+
 #titre {
   text-decoration: underline;
   font-style: italic;
   font-weight: bold;
 }
+
 .reserever-button {
   margin: 10px;
   background-color: rgb(192, 192, 255);
