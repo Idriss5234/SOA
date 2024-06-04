@@ -37,7 +37,7 @@ useEffect(() => {
     // Filter rooms based on searchQuery
     const filteredRooms = rooms.filter(
       (room) =>
-        room.name && room.name.toLowerCase().includes(searchQuery.toLowerCase())
+        room.title && room.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Update the state with filtered rooms
