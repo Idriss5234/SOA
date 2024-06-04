@@ -4,12 +4,12 @@ import { useParams, Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./RoomDetailsPage.css";
-import { Link } from "react-router-dom";
 import Calendar from "./Calendar";
-import { UserContext } from "../../Services/Auth/context/userContext";
 import mail from "./mail";
-import { UserContext,UserProvider } from "../../Services/Auth/context/userContext";
-import { useContext } from "react";
+import {
+  UserContext,
+  UserProvider,
+} from "../../Services/Auth/context/userContext";
 
 function RoomDetailsPage() {
   const User = useContext(UserContext);
@@ -27,7 +27,9 @@ function RoomDetailsPage() {
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/posts/${id}`);
+        const response = await axios.get(
+          `http://localhost:3001/api/posts/${id}`
+        );
         setRoom(response.data.post);
       } catch (error) {
         console.error("Error fetching room details:", error);
@@ -36,11 +38,9 @@ function RoomDetailsPage() {
     fetchRoomDetails();
   }, [id]);
 
-
   if (!room) {
     return <div>Loading...</div>;
   }
-
 
   const handleNextImage = () => {
     const nextIndex = (currentImageIndex + 1) % allPhotos.length;
@@ -48,7 +48,8 @@ function RoomDetailsPage() {
   };
 
   const handlePrevImage = () => {
-    const prevIndex = currentImageIndex === 0 ? allPhotos.length - 1 : currentImageIndex - 1;
+    const prevIndex =
+      currentImageIndex === 0 ? allPhotos.length - 1 : currentImageIndex - 1;
     setCurrentImageIndex(prevIndex);
   };
 
@@ -90,7 +91,7 @@ function RoomDetailsPage() {
         post: room._id,
         creator: user.user.user._id,
         dateStart: startDate.toISOString(),
-        dateEnd: endDate.toISOString()
+        dateEnd: endDate.toISOString(),
       });
       setReservationMessage("Reservation successful!");
     } catch (error) {
@@ -174,7 +175,7 @@ function RoomDetailsPage() {
           )}
         </div>
       </div>
-      
+
       <div className="reservation-container">
         <h3>Reserve this room</h3>
         <DatePicker
